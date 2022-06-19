@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CrudSimplesApiFiis.Data;
+using CrudSimplesApiFiis.Interfaces;
+using CrudSimplesApiFiis.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -19,6 +21,9 @@ namespace CrudSimplesApiFiis
         {
             services.AddControllers(); //precisa disso pra trabalhar com controladores
             services.AddDbContext<AppDbContext>();
+
+            //interfaces e repositorios
+            services.AddScoped<ICategoriaService, CategoriaService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -30,6 +35,8 @@ namespace CrudSimplesApiFiis
             }
 
             app.UseRouting();
+           // app.UseAuthentication();//aaaaaa
+            //app.UseAuthorization(); // aaaaaa
 
             app.UseEndpoints(endpoints =>
             {
