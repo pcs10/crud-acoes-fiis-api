@@ -1,7 +1,7 @@
 ﻿using CrudSimplesApiFiis.Data;
 using CrudSimplesApiFiis.Interfaces;
 using CrudSimplesApiFiis.Models;
-using CrudSimplesApiFiis.Services;
+using CrudSimplesApiFiis.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -16,9 +16,9 @@ namespace CrudSimplesApiFiis.Controllers
     [Route(template: "v1")]
     public class CategoriaController : ControllerBase
     {
-        public readonly ICategoriaService _categoriaService;
+        public readonly ICategoriaRepository _categoriaService;
 
-        public CategoriaController(ICategoriaService categoriaService)
+        public CategoriaController(ICategoriaRepository categoriaService)
         {
             _categoriaService = categoriaService;
         }
@@ -40,17 +40,13 @@ namespace CrudSimplesApiFiis.Controllers
         {
             try
             {
-                Console.WriteLine("------------| Entrou 1 |---------------------");
                 return Ok (await _categoriaService.BuscarTodos());
-               // return Ok(await buscarTodos());
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine("------------| Entrou 4 |---------------------");
                 return BadRequest(ex.ToString());
             }
-        //
         }
 
         //depois eu vou externalizar esse método - isso é apenas o começo pra separar a lógica dos controllers

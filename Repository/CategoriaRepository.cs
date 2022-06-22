@@ -6,14 +6,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CrudSimplesApiFiis.Services
+namespace CrudSimplesApiFiis.Repository
 {
-    public class CategoriaService : ICategoriaService
+    public class CategoriaRepository : ICategoriaRepository
     {
 
         //deixar o contexto fora para que nao precise toda horas ficar passando ele entre parametros
         private readonly AppDbContext _context;
-        public CategoriaService(AppDbContext context)
+        public CategoriaRepository(AppDbContext context)
         {
             _context = context;
         }
@@ -21,8 +21,6 @@ namespace CrudSimplesApiFiis.Services
 
         public async Task<IEnumerable<CategoriaModel>> BuscarTodos()
         {
-            
-            Console.WriteLine("------------| Entrou 2 |---------------------");
             var categorias = await _context
                             .Categorias
                             .AsNoTracking()

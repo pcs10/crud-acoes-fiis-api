@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CrudSimplesApiFiis.Data;
 using CrudSimplesApiFiis.Interfaces;
-using CrudSimplesApiFiis.Services;
+using CrudSimplesApiFiis.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -23,7 +23,7 @@ namespace CrudSimplesApiFiis
             services.AddDbContext<AppDbContext>();
 
             //interfaces e repositorios
-            services.AddScoped<ICategoriaService, CategoriaService>();
+            services.AddScoped<ICategoriaRepository, CategoriaRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

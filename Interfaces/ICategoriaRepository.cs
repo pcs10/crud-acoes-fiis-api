@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace CrudSimplesApiFiis.Interfaces
 {
-    public interface ICategoriaService
+    public interface ICategoriaRepository
     {
         Task<IEnumerable<CategoriaModel>> BuscarTodos();
     }
