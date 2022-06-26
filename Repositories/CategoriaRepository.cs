@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CrudSimplesApiFiis.Repository
+namespace CrudSimplesApiFiis.Repositories
 {
     public class CategoriaRepository : ICategoriaRepository
     {
@@ -27,8 +27,37 @@ namespace CrudSimplesApiFiis.Repository
                             .ToListAsync();
             Console.WriteLine(categorias.ToString());
             return categorias;
-
         }
 
+        public async Task<string> Inserir(CategoriaModel categoria)
+        {
+            if ((categoria.Nome == null) || (categoria.Nome == ""))
+            {
+                return "Nome da categoria não pode ser nulo";
+            }
+            else
+            {
+                try
+                {
+                    await _context.Categorias.AddAsync(categoria);
+                    await _context.SaveChangesAsync();
+                    return "";
+                }
+                catch (Exception ex)
+                {
+                    return "Erro ao inserir -> " + ex;
+
+                }
+
+            }
+
+
+
+
+
+
+
+
+        }
     }
 }

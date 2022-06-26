@@ -1,13 +1,7 @@
-﻿using CrudSimplesApiFiis.Data;
-using CrudSimplesApiFiis.Interfaces;
+﻿using CrudSimplesApiFiis.Interfaces;
 using CrudSimplesApiFiis.Models;
-using CrudSimplesApiFiis.Repository;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CrudSimplesApiFiis.Controllers
@@ -25,22 +19,11 @@ namespace CrudSimplesApiFiis.Controllers
 
         [HttpGet]
         [Route(template: "categorias")]
-        public async Task<IActionResult> GetAsync([FromServices] AppDbContext context)
-        {
-            var categorias = await context
-                .Categorias
-                .AsNoTracking()
-                .ToListAsync();
-            return Ok(categorias);
-        }
-
-        [HttpGet]
-        [Route(template: "categorias2")]
-        public async Task<IActionResult> GetAsync2()
+        public async Task<IActionResult> ListarTodosAsync()
         {
             try
             {
-                return Ok (await _categoriaService.BuscarTodos());
+                return Ok(await _categoriaService.BuscarTodos());
 
             }
             catch (Exception ex)
@@ -49,19 +32,33 @@ namespace CrudSimplesApiFiis.Controllers
             }
         }
 
-        //depois eu vou externalizar esse método - isso é apenas o começo pra separar a lógica dos controllers
-       /* public async Task<IEnumerable<CategoriaModel>> buscarTodos()
+        [HttpPost(template: "categorias")]
+        public async Task<IActionResult> InserirAsync(
+          [FromBody] CategoriaModel categoriaModel)
         {
-            Console.WriteLine("------------| Entrou 9 |---------------------");
-            var categorias = await _context
-                .Categorias
-                .AsNoTracking()
-                .ToListAsync();
-            Console.WriteLine(categorias.ToString());
-            Console.WriteLine("------------| Entrou 10 |---------------------");
-            return categorias;
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            try
+            {
+                var erro = await _categoriaService.Inserir(categoriaModel);
+
+                if ((erro == null) || erro == "")
+                    return Created($"v1/categorias/{categoriaModel.Id}", categoriaModel);
+                else
+                    return BadRequest("ERRO -> " + erro.ToString());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("ERRO -> " + ex);
+            }
+
+
+
+
         }
-       */
+
+
 
     }
 
@@ -69,3 +66,17 @@ namespace CrudSimplesApiFiis.Controllers
 
 
 }
+
+//depois eu vou externalizar esse método - isso é apenas o começo pra separar a lógica dos controllers
+/* public async Task<IEnumerable<CategoriaModel>> buscarTodos()
+ {
+     Console.WriteLine("------------| Entrou 9 |---------------------");
+     var categorias = await _context
+         .Categorias
+         .AsNoTracking()
+         .ToListAsync();
+     Console.WriteLine(categorias.ToString());
+     Console.WriteLine("------------| Entrou 10 |---------------------");
+     return categorias;
+ }
+*/
