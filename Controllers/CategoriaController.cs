@@ -30,7 +30,7 @@ namespace CrudSimplesApiFiis.Controllers
             {
                 return BadRequest(ex.ToString());
             }
-        }
+        }// listar todos
 
         [HttpPost(template: "categorias")]
         public async Task<IActionResult> InserirAsync(
@@ -52,11 +52,46 @@ namespace CrudSimplesApiFiis.Controllers
             {
                 return BadRequest("ERRO -> " + ex);
             }
+        }//inserir
 
+        [HttpPut(template: ("categorias/{id}"))]
+        public async Task<IActionResult> AlterarAsync([FromBody] CategoriaModel categoriaModel, [FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
 
+            try
+            {
+                var erro = await _categoriaService.Alterar(categoriaModel, id);
 
+                if ((erro == null) || erro == "")
+                    return Ok(categoriaModel);
+                else
+                    return BadRequest("ERRO -> " + erro.ToString());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("ERRO -> " + ex);
+            }
 
         }
+
+        /*
+          [HttpGet]
+        [Route(template: "alunos")]
+        public async Task<ActionResult<IEnumerable<Aluno>>> ListarTodosAsync()
+        {
+            try
+            {
+                return Ok(await _alunoService.BuscarTodos());
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }// listar todos
+*/
 
 
 

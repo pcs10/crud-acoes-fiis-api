@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CrudSimplesApiFiis.Models
 {
-    public class FundoImobiliario
+    public class FundoImobiliarioModel
     {
         public int Id { get; set; }
         public string Papel { get; set; } //antigo Nome - HGLG11
@@ -14,7 +15,7 @@ namespace CrudSimplesApiFiis.Models
         public string CotasEmitidas {get; set; }
         public string Cnpj { get; set; }
         public string PublicoAlvo { get; set; } // vai virar enum futuramente
-        public string Categoria { get; set; } // vai virar fk futuramente
+        public ICollection<CategoriaModel> Categorias { get; set; }
         public decimal TaxaAdministracao { get; set; }
         public bool Ativo { get; set; }
 

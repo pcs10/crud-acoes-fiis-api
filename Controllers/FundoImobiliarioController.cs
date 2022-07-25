@@ -33,12 +33,12 @@ namespace CrudSimplesApiFiis.Controllers
         [HttpPost(template: "fundos-imobiliarios")]
         public async Task<IActionResult> PostAsync(
             [FromServices] AppDbContext context,
-            [FromBody] FundoImobiliario fiiModel)
+            [FromBody] FundoImobiliarioModel fiiModel)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var fundoImobiliario = new FundoImobiliario
+            var fundoImobiliario = new FundoImobiliarioModel
             {
                 /*Nome = fiiModel.Nome,
                 ValorPatrimonial = fiiModel.ValorPatrimonial,
@@ -67,7 +67,7 @@ namespace CrudSimplesApiFiis.Controllers
 
 
         [HttpPut(template: ("fundos-imobiliarios/{id}"))]
-        public async Task<IActionResult> PutAsync([FromServices] AppDbContext context, [FromBody] FundoImobiliario fiiModel, [FromRoute] int id)
+        public async Task<IActionResult> PutAsync([FromServices] AppDbContext context, [FromBody] FundoImobiliarioModel fiiModel, [FromRoute] int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest();

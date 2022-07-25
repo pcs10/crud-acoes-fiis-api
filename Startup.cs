@@ -5,20 +5,24 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Text.Json.Serialization;
 
 namespace CrudSimplesApiFiis
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers(); //precisa disso pra trabalhar com controladores
+            //precisa disso pra trabalhar com controladores
+            services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
             services.AddDbContext<AppDbContext>();
 
             //interfaces e repositorios
             services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+           // services.AddScoped<IAluno, AlunoRepository>();
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -30,7 +34,7 @@ namespace CrudSimplesApiFiis
             }
 
             app.UseRouting();
-           // app.UseAuthentication();//aaaaaa
+            // app.UseAuthentication();//aaaaaa
             //app.UseAuthorization(); // aaaaaa
 
             app.UseEndpoints(endpoints =>

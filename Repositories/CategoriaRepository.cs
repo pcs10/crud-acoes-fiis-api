@@ -8,6 +8,21 @@ using System.Threading.Tasks;
 
 namespace CrudSimplesApiFiis.Repositories
 {
+    /* testeeeeee
+    public async Task<ICollection<Aluno>> BuscarTodos()
+        {
+
+            var alunos = await _context
+                            .Alunos
+                            .Include(d => d.Disciplinas)
+                            .AsNoTracking()
+                            //.Where(a => a.Id == 1)
+                            .ToListAsync();
+
+
+            return alunos;
+        }
+*/
     public class CategoriaRepository : ICategoriaRepository
     {
 
@@ -18,6 +33,16 @@ namespace CrudSimplesApiFiis.Repositories
             _context = context;
         }
 
+        public async Task<string> Alterar(CategoriaModel categoria, int id)
+        {
+            if (await _context.Categorias.FirstOrDefaultAsync(x => x.Id == id) == null)
+            {
+                return "Categoria não encontrada";
+            }
+
+            return "";
+
+        }//alterar
 
         public async Task<IEnumerable<CategoriaModel>> BuscarTodos()
         {
@@ -27,7 +52,7 @@ namespace CrudSimplesApiFiis.Repositories
                             .ToListAsync();
             Console.WriteLine(categorias.ToString());
             return categorias;
-        }
+        }// buscar todos
 
         public async Task<string> Inserir(CategoriaModel categoria)
         {
@@ -46,18 +71,8 @@ namespace CrudSimplesApiFiis.Repositories
                 catch (Exception ex)
                 {
                     return "Erro ao inserir -> " + ex;
-
                 }
-
             }
-
-
-
-
-
-
-
-
-        }
+        }// Inserir
     }
 }
