@@ -6,9 +6,9 @@ namespace CrudSimplesApiFiis.Interfaces
 {
     public interface ICategoriaRepository
     {
-        Task<IEnumerable<CategoriaModel>> BuscarTodos();
-        Task<string> Inserir(CategoriaModel categoria);
-        Task<string> Alterar(CategoriaModel categoria, int id);
+        Task<IEnumerable<Categoria>> BuscarTodos();
+        Task<string> Inserir(Categoria categoria);
+        Task<string> Alterar(Categoria categoria, int id);
 
         //Task<ICollection<Aluno>> BuscarTodos();
     }

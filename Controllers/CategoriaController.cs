@@ -33,8 +33,7 @@ namespace CrudSimplesApiFiis.Controllers
         }// listar todos
 
         [HttpPost(template: "categorias")]
-        public async Task<IActionResult> InserirAsync(
-          [FromBody] CategoriaModel categoriaModel)
+        public async Task<IActionResult> InserirAsync([FromBody] Categoria categoriaModel)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -55,7 +54,7 @@ namespace CrudSimplesApiFiis.Controllers
         }//inserir
 
         [HttpPut(template: ("categorias/{id}"))]
-        public async Task<IActionResult> AlterarAsync([FromBody] CategoriaModel categoriaModel, [FromRoute] int id)
+        public async Task<IActionResult> AlterarAsync([FromBody] Categoria categoriaModel, [FromRoute] int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest();

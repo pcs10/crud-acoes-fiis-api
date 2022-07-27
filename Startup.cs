@@ -20,8 +20,9 @@ namespace CrudSimplesApiFiis
 
             //interfaces e repositorios
             services.AddScoped<ICategoriaRepository, CategoriaRepository>();
-           // services.AddScoped<IAluno, AlunoRepository>();
+            services.AddScoped<IFundoImobiliarioRepository, FundoImobiliarioRepository>();
 
+            //services.AddHttpContextAccessor();
             services.AddCors();
         }
 

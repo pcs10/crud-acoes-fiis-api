@@ -35,4 +35,5 @@ Depois de clonar o projeto, seguir os passos:
 ## 🛠️ Tecnologias 
 
 * [.Net 5.0](https://dotnet.microsoft.com/en-us/download/dotnet/5.0) 
+* Atualizado para o [.NET 6.0]
 * Entity Framework

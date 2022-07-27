@@ -1,4 +1,5 @@
 ﻿using CrudSimplesApiFiis.Data;
+using CrudSimplesApiFiis.Interfaces;
 using CrudSimplesApiFiis.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,122 +12,115 @@ namespace CrudSimplesApiFiis.Controllers
     [Route(template: "v1")]
     public class FundoImobiliarioController : ControllerBase
     {
+
+        public readonly IFundoImobiliarioRepository _fundoImobiliarioService;
+
+        public FundoImobiliarioController(IFundoImobiliarioRepository fundoImobiliarioService)
+        {
+            _fundoImobiliarioService = fundoImobiliarioService;
+        }
+
+
         [HttpGet]
         [Route(template: "fundos-imobiliarios")]
-        public async Task<IActionResult> GetAsync([FromServices] AppDbContext context)
+        public async Task<IActionResult> ListarTodosAsync()
         {
-            var fundosImobiliarios = await context
-                .FundosImobiliarios
-                .AsNoTracking()
-                .ToListAsync();
-            return Ok(fundosImobiliarios);
-        }
+            try
+            {
+                return Ok(await _fundoImobiliarioService.BuscarTodos());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }//listar todos
 
         [HttpGet]
         [Route(template: "fundos-imobiliarios/{id}")]
-        public async Task<IActionResult> GetByIdAsync([FromServices] AppDbContext context, [FromRoute] int id)
+        public async Task<IActionResult> ListarPorIdAsync([FromRoute] int id)
         {
-            var fundoImobiliario = await context.FundosImobiliarios.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
-            return fundoImobiliario == null ? NotFound() : Ok();
-        }
+            try
+            {
+                var fundoImobiliario = await _fundoImobiliarioService.BuscarPorId(id);
+
+                if (fundoImobiliario == null)
+                {
+                    return BadRequest("ERRO -> Fundo imobiliario não encontrado");
+                }
+                else
+                {
+                    return Ok(fundoImobiliario);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }//listar um
 
         [HttpPost(template: "fundos-imobiliarios")]
-        public async Task<IActionResult> PostAsync(
-            [FromServices] AppDbContext context,
-            [FromBody] FundoImobiliarioModel fiiModel)
+        public async Task<IActionResult> InserirAsync([FromBody] FundoImobiliario fundoImobiliario)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var fundoImobiliario = new FundoImobiliarioModel
-            {
-                /*Nome = fiiModel.Nome,
-                ValorPatrimonial = fiiModel.ValorPatrimonial,
-                PatrimonioLiquido = fiiModel.PatrimonioLiquido,
-                DataIpo = fiiModel.DataIpo,
-                CotasEmitidas = fiiModel.CotasEmitidas,
-                Cnpj = fiiModel.Cnpj,
-                PublicoAlvo = fiiModel.PublicoAlvo,
-                TaxaAdministracao = fiiModel.TaxaAdministracao,
-                Ativo = fiiModel.Ativo*/
-            };
-
             try
             {
-                await context.FundosImobiliarios.AddAsync(fundoImobiliario);
-                await context.SaveChangesAsync();
-                return Created($"v1/fundos-imobiliarios/{fundoImobiliario.Id}", fundoImobiliario);
+                var erro = await _fundoImobiliarioService.Inserir(fundoImobiliario);
+
+                if ((erro == null) || erro == "")
+                    return Created($"v1/fundos-imobiliarios/{fundoImobiliario.Id}", fundoImobiliario);
+                else
+                    return BadRequest("ERRO -> " + erro.ToString());
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.Out.WriteLine("Inicio Erro -> " + e);
-                return BadRequest();
+                return BadRequest("ERRO -> " + ex);
             }
-        }
-
-
+        }//inserir
 
         [HttpPut(template: ("fundos-imobiliarios/{id}"))]
-        public async Task<IActionResult> PutAsync([FromServices] AppDbContext context, [FromBody] FundoImobiliarioModel fiiModel, [FromRoute] int id)
+        public async Task<IActionResult> PutAsync([FromBody] FundoImobiliario fundoImobiliario, [FromRoute] int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var fundoImobiliario = await context
-                .FundosImobiliarios
-                .FirstOrDefaultAsync(x => x.Id == id);
-
-            if (fundoImobiliario == null)
-                return NotFound();
-
             try
             {
-               /* fundoImobiliario.Nome = fiiModel.Nome;
-                fundoImobiliario.ValorPatrimonial = fiiModel.ValorPatrimonial;
-                fundoImobiliario.PatrimonioLiquido = fiiModel.PatrimonioLiquido;
-                fundoImobiliario.DataIpo = fiiModel.DataIpo;
-                fundoImobiliario.CotasEmitidas = fiiModel.CotasEmitidas;
-                fundoImobiliario.Cnpj = fiiModel.Cnpj;
-                fundoImobiliario.PublicoAlvo = fiiModel.PublicoAlvo;
-                fundoImobiliario.TaxaAdministracao = fiiModel.TaxaAdministracao;
-                fundoImobiliario.Ativo = fiiModel.Ativo;*/
+                var erro = await _fundoImobiliarioService.Alterar(fundoImobiliario, id);
 
-                //inserindo no banco
-                context.FundosImobiliarios.Update(fundoImobiliario);
-                await context.SaveChangesAsync();
-
-                return Ok(fundoImobiliario);
+                if ((erro == null) || erro == "")
+                    return Ok();
+                else
+                    return BadRequest("ERRO -> " + erro);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.Out.WriteLine("Inicio Erro -> " + e);
-                return BadRequest();
+                return BadRequest("ERRO -> " + ex);
             }
 
-        }
+        }// alterar 
 
         [HttpDelete(template: "fundos-imobiliarios/{id}")]
-        public async Task<IActionResult> DeleteAsync(
-            [FromServices] AppDbContext context,
-            [FromRoute] int id)
+        public async Task<IActionResult> DeleteAsync([FromRoute] int id)
         {
-            var fundoImobiliario = await context
-                .FundosImobiliarios
-                .FirstOrDefaultAsync(x => x.Id == id);
-
+            if (!ModelState.IsValid)
+                return BadRequest();
             try
             {
-                context.FundosImobiliarios.Remove(fundoImobiliario);
-                await context.SaveChangesAsync();
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                Console.Out.WriteLine("Inicio Erro -> " + e);
-                return BadRequest();
-            }
-        }
+                var erro = await _fundoImobiliarioService.Excluir(id);
 
+                if ((erro == null) || erro == "")
+                    return Ok("Fundo imobiliario excluido com sucesso");
+                else
+                    return BadRequest("ERRO -> " + erro);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("ERRO -> " + ex);
+            }
+
+        }//excluir
 
     } //public class FundoImobiliarioController
 }
