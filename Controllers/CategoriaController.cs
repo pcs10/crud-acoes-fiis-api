@@ -32,6 +32,29 @@ namespace CrudSimplesApiFiis.Controllers
             }
         }// listar todos
 
+        [HttpGet]
+        [Route(template: "categorias/{id}")]
+        public async Task<IActionResult> ListarPorIdAsync([FromRoute] int id)
+        {
+            try
+            {
+                var categoria = await _categoriaService.BuscarPorId(id);
+
+                if (categoria == null)
+                {
+                    return BadRequest("ERRO -> Categoria não encontrada");
+                }
+                else
+                {
+                    return Ok(categoria);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }//listar um
+
         [HttpPost(template: "categorias")]
         public async Task<IActionResult> InserirAsync([FromBody] Categoria categoriaModel)
         {
@@ -61,56 +84,40 @@ namespace CrudSimplesApiFiis.Controllers
 
             try
             {
-                var erro = await _categoriaService.Alterar(categoriaModel, id);
+                var categoria = await _categoriaService.Alterar(categoriaModel, id);
 
-                if ((erro == null) || erro == "")
-                    return Ok(categoriaModel);
+                if ((categoria == null) || categoria == "")
+                    return Ok(categoria);
                 else
-                    return BadRequest("ERRO -> " + erro.ToString());
+                    return BadRequest("ERRO -> " + categoria);
             }
             catch (Exception ex)
             {
                 return BadRequest("ERRO -> " + ex);
             }
 
-        }
+        } //alterar
 
-        /*
-          [HttpGet]
-        [Route(template: "alunos")]
-        public async Task<ActionResult<IEnumerable<Aluno>>> ListarTodosAsync()
+        [HttpDelete(template: "categorias/{id}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] int id)
         {
+            if (!ModelState.IsValid)
+                return BadRequest();
             try
             {
-                return Ok(await _alunoService.BuscarTodos());
+                var erro = await _categoriaService.Excluir(id);
 
+                if ((erro == null) || erro == "")
+                    return Ok("Categoria excluída com sucesso");
+                else
+                    return BadRequest("ERRO -> " + erro);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.ToString());
+                return BadRequest("ERRO -> " + ex);
             }
-        }// listar todos
-*/
-
-
+        }//excluir
 
     }
-
-
-
-
 }
 
-//depois eu vou externalizar esse método - isso é apenas o começo pra separar a lógica dos controllers
-/* public async Task<IEnumerable<CategoriaModel>> buscarTodos()
- {
-     Console.WriteLine("------------| Entrou 9 |---------------------");
-     var categorias = await _context
-         .Categorias
-         .AsNoTracking()
-         .ToListAsync();
-     Console.WriteLine(categorias.ToString());
-     Console.WriteLine("------------| Entrou 10 |---------------------");
-     return categorias;
- }
-*/

@@ -21,25 +21,74 @@ namespace CrudSimplesApiFiis.Repositories
 
         public async Task<string> Alterar(Categoria categoria, int id)
         {
-            if (await _context.Categorias.FirstOrDefaultAsync(x => x.Id == id) == null)
+            var categoriaFii = await _context
+                .Categorias
+                .Include(f => f.FundosImobiliarios)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (categoriaFii == null)
             {
                 return "Categoria não encontrada";
             }
+            else
+            {
+                categoriaFii.Nome = categoria.Nome == null ? categoriaFii.Nome : categoria.Nome;
+            }
 
-            return "";
+            try
+            {
+                _context.Categorias.Update(categoriaFii);
+                await _context.SaveChangesAsync();
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return "Erro ao atualizar -> " + ex;
+            }
+
 
         }//alterar
+
+        public async Task<Categoria> BuscarPorId(int id)
+        {
+            var categoria = await _context
+                 .Categorias
+                 .Include(f => f.FundosImobiliarios)
+                 .FirstOrDefaultAsync(x => x.Id == id);
+
+            return categoria;
+        }
 
         public async Task<IEnumerable<Categoria>> BuscarTodos()
         {
             var categorias = await _context
                             .Categorias
-                            .Include(fii => fii.FundosImobiliarios)
+                            //.Include(fii => fii.FundosImobiliarios)
                             .AsNoTracking()
                             .ToListAsync();
-            Console.WriteLine(categorias.ToString());
+
             return categorias;
         }// buscar todos
+
+        public async Task<string> Excluir(int id)
+        {
+            var categoria = await _context
+                 .Categorias
+                 .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (categoria == null) return "Categoria não encontrado";
+
+            try
+            {
+                _context.Categorias.Remove(categoria);
+                await _context.SaveChangesAsync();
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return "Erro ao excluir -> " + ex;
+            }
+        }
 
         public async Task<string> Inserir(Categoria categoria)
         {

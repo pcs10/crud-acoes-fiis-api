@@ -29,11 +29,11 @@ namespace CrudSimplesApiFiis.Models
         public decimal ValorPatrimonial { get; set; }
 
 
-        public decimal PatrimonioLiquido { get; set; }
+        public decimal? PatrimonioLiquido { get; set; }
 
 
         [Required, Column(TypeName = "DATE")]
-        public DateTime DataIpo { get; set; }
+        public DateTime? DataIpo { get; set; }
 
 
         public string CotasEmitidas {get; set; }
@@ -48,7 +48,7 @@ namespace CrudSimplesApiFiis.Models
         public ICollection<Categoria> Categorias { get; set; }
 
 
-        public decimal TaxaAdministracao { get; set; }
+        public decimal? TaxaAdministracao { get; set; }
 
 
         public string Ativo { get; set; }

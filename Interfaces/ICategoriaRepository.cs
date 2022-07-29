@@ -9,7 +9,7 @@ namespace CrudSimplesApiFiis.Interfaces
         Task<IEnumerable<Categoria>> BuscarTodos();
         Task<string> Inserir(Categoria categoria);
         Task<string> Alterar(Categoria categoria, int id);
-
-        //Task<ICollection<Aluno>> BuscarTodos();
+        Task<Categoria> BuscarPorId(int id);
+        Task<string> Excluir(int id);
     }
 }

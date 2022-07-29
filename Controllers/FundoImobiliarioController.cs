@@ -4,6 +4,7 @@ using CrudSimplesApiFiis.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CrudSimplesApiFiis.Controllers
@@ -80,14 +81,16 @@ namespace CrudSimplesApiFiis.Controllers
         }//inserir
 
         [HttpPut(template: ("fundos-imobiliarios/{id}"))]
-        public async Task<IActionResult> PutAsync([FromBody] FundoImobiliario fundoImobiliario, [FromRoute] int id)
+        public async Task<IActionResult> PutAsync([FromBody] FundoImobiliario fundoImobiliario, 
+            [FromRoute] int id, [FromQuery] List<int> categoriasId)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
+            //Console.WriteLine("aaaaa -> " + categoriasId[1]);
             try
             {
-                var erro = await _fundoImobiliarioService.Alterar(fundoImobiliario, id);
+                var erro = await _fundoImobiliarioService.Alterar(fundoImobiliario, id, categoriasId);
 
                 if ((erro == null) || erro == "")
                     return Ok();

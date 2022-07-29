@@ -16,7 +16,7 @@ namespace CrudSimplesApiFiis.Repositories
             _context = context;
         }
 
-        public async Task<string> Alterar(FundoImobiliario fundoImobiliario, int id)
+        public async Task<string> Alterar(FundoImobiliario fundoImobiliario, int id, List<int> categoriasId)
         {
             var fii = await _context
                 .FundosImobiliarios
@@ -30,18 +30,29 @@ namespace CrudSimplesApiFiis.Repositories
             else
             {
                 fii.Papel = fundoImobiliario.Papel == null ? fii.Papel : fundoImobiliario.Papel;
-                fii.NomeFundo = fundoImobiliario.NomeFundo;
-                fii.Administradora = fundoImobiliario.Administradora;
-                fii.ValorPatrimonial = fundoImobiliario.ValorPatrimonial;
-                fii.PatrimonioLiquido = fundoImobiliario.PatrimonioLiquido;
-                fii.DataIpo = fundoImobiliario.DataIpo;
+                fii.NomeFundo = fundoImobiliario.NomeFundo == null ? fii.NomeFundo : fundoImobiliario.NomeFundo;
+                fii.Administradora = fundoImobiliario.Administradora == null ? fii.Administradora : fundoImobiliario.Administradora;
+                fii.ValorPatrimonial = fundoImobiliario.ValorPatrimonial == 0 ? fii.ValorPatrimonial : fundoImobiliario.ValorPatrimonial;
+                fii.PatrimonioLiquido = fundoImobiliario.PatrimonioLiquido == null ? fii.PatrimonioLiquido : fundoImobiliario.PatrimonioLiquido;
+                fii.DataIpo = fundoImobiliario.DataIpo == null ? fii.DataIpo : fundoImobiliario.DataIpo;
                 fii.CotasEmitidas = fundoImobiliario.CotasEmitidas == null ? fii.CotasEmitidas : fundoImobiliario.CotasEmitidas;
-                fii.Cnpj = fundoImobiliario.Cnpj;
-                fii.PublicoAlvo = fundoImobiliario.PublicoAlvo;
-                fii.TaxaAdministracao = fundoImobiliario.TaxaAdministracao;
-                fii.Ativo = fundoImobiliario.Ativo;
-                fii.PublicoAlvo = fundoImobiliario.PublicoAlvo;
+                fii.Cnpj = fundoImobiliario.Cnpj == null ? fii.Cnpj : fundoImobiliario.Cnpj;
+                fii.PublicoAlvo = fundoImobiliario.PublicoAlvo == null ? fii.PublicoAlvo : fundoImobiliario.PublicoAlvo;
+                fii.TaxaAdministracao = fundoImobiliario.TaxaAdministracao == null ? fii.TaxaAdministracao : fundoImobiliario.TaxaAdministracao;
+                fii.Ativo = fundoImobiliario.Ativo == null ? fii.Ativo : fundoImobiliario.Ativo;
+                fii.PublicoAlvo = fundoImobiliario.PublicoAlvo == null ? fii.PublicoAlvo : fundoImobiliario.PublicoAlvo;
+            }
 
+            //sempre apagar todas as categorias e considerar somente o que mandou por ultimo
+            if (categoriasId != null)
+            {
+                fii.Categorias.Clear();
+
+                foreach (int elemento in categoriasId)
+                {
+                    var categorias = await _context.Categorias.FirstOrDefaultAsync(c => c.Id == elemento);
+                    fii.Categorias.Add(categorias);
+                }
             }
 
             try
@@ -52,9 +63,8 @@ namespace CrudSimplesApiFiis.Repositories
             }
             catch (Exception ex)
             {
-                return "Erro ao excluir -> " + ex;
+                return "Erro ao atualizar -> " + ex;
             }
-
         }
 
         public async Task<FundoImobiliario> BuscarPorId(int id)
@@ -100,21 +110,21 @@ namespace CrudSimplesApiFiis.Repositories
 
         public async Task<string> Inserir(FundoImobiliario fundoImobiliario)
         {
-            var fii = new FundoImobiliario
-            {
-                Papel = fundoImobiliario.Papel,
-                NomeFundo = fundoImobiliario.NomeFundo,
-                Administradora = fundoImobiliario.Administradora,
-                ValorPatrimonial = fundoImobiliario.ValorPatrimonial,
-                PatrimonioLiquido = fundoImobiliario.PatrimonioLiquido,
-                DataIpo = fundoImobiliario.DataIpo,
-                CotasEmitidas = fundoImobiliario.CotasEmitidas,
-                Cnpj = fundoImobiliario.Cnpj,
-                PublicoAlvo = fundoImobiliario.PublicoAlvo,
-                TaxaAdministracao = fundoImobiliario.TaxaAdministracao,
-                Ativo = fundoImobiliario.Ativo
-            };
-            //fazer validações com informações da variavel temporaria
+            var fii = new FundoImobiliario();
+
+            fii.Papel = fundoImobiliario.Papel;
+            fii.NomeFundo = fundoImobiliario.NomeFundo;
+            fii.Administradora = fundoImobiliario.Administradora;
+            fii.ValorPatrimonial = fundoImobiliario.ValorPatrimonial;
+            fii.PatrimonioLiquido = fundoImobiliario.PatrimonioLiquido;
+            fii.DataIpo = fundoImobiliario.DataIpo;
+            fii.CotasEmitidas = fundoImobiliario.CotasEmitidas;
+            fii.Cnpj = fundoImobiliario.Cnpj;
+            fii.PublicoAlvo = fundoImobiliario.PublicoAlvo;
+            fii.TaxaAdministracao = fundoImobiliario.TaxaAdministracao;
+            fii.Ativo = fundoImobiliario.Ativo;
+            fii.Categorias = fundoImobiliario.Categorias;
+
 
             try
             {

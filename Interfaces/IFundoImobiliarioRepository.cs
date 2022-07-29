@@ -9,7 +9,7 @@ namespace CrudSimplesApiFiis.Interfaces
         Task<IEnumerable<FundoImobiliario>> BuscarTodos();
         Task<FundoImobiliario> BuscarPorId(int id);
         Task<string> Inserir(FundoImobiliario fundoImobiliario);
-        Task <string> Alterar(FundoImobiliario fundoImobiliario, int id);
+        Task <string> Alterar(FundoImobiliario fundoImobiliario, int id, List<int> categoriasId);
         Task<string> Excluir(int id);
     }
 }
