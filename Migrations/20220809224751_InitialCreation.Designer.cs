@@ -6,17 +6,18 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace CrudSimplesApiFiis.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220725193752_InitialCreation")]
+    [Migration("20220809224751_InitialCreation")]
     partial class InitialCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.17");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.7");
 
             modelBuilder.Entity("CategoriaFundoImobiliario", b =>
                 {
@@ -30,7 +31,7 @@ namespace CrudSimplesApiFiis.Migrations
 
                     b.HasIndex("FundosImobiliariosId");
 
-                    b.ToTable("CategoriaFundoImobiliario");
+                    b.ToTable("CategoriaFundoImobiliario", (string)null);
                 });
 
             modelBuilder.Entity("CrudSimplesApiFiis.Models.Categoria", b =>
@@ -42,7 +43,7 @@ namespace CrudSimplesApiFiis.Migrations
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("VARCHAR");
+                        .HasColumnType("VARCHAR(30)");
 
                     b.HasKey("Id");
 
@@ -58,36 +59,43 @@ namespace CrudSimplesApiFiis.Migrations
                     b.Property<string>("Administradora")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Ativo")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("VARCHAR(1)");
 
                     b.Property<string>("Cnpj")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasMaxLength(14)
+                        .HasColumnType("VARCHAR(14)");
 
-                    b.Property<string>("CotasEmitidas")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("CotasEmitidas")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("DataIpo")
+                    b.Property<DateTime?>("DataIpo")
+                        .IsRequired()
                         .HasColumnType("DATE");
 
                     b.Property<string>("NomeFundo")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("VARCHAR");
+                        .HasColumnType("VARCHAR(100)");
 
                     b.Property<string>("Papel")
                         .IsRequired()
                         .HasMaxLength(8)
-                        .HasColumnType("VARCHAR");
+                        .HasColumnType("VARCHAR(10)");
 
-                    b.Property<decimal>("PatrimonioLiquido")
-                        .HasColumnType("TEXT");
+                    b.Property<decimal?>("PatrimonioLiquido")
+                        .HasColumnType("DECIMAL(18,2)");
 
                     b.Property<string>("PublicoAlvo")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("VARCHAR(50)");
 
-                    b.Property<decimal>("TaxaAdministracao")
-                        .HasColumnType("TEXT");
+                    b.Property<decimal?>("TaxaAdministracao")
+                        .HasColumnType("DECIMAL(18,2)");
 
                     b.Property<decimal>("ValorPatrimonial")
                         .HasColumnType("DECIMAL(18,2)");

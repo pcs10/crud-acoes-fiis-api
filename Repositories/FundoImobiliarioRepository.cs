@@ -35,7 +35,7 @@ namespace CrudSimplesApiFiis.Repositories
                 fii.ValorPatrimonial = fundoImobiliario.ValorPatrimonial == 0 ? fii.ValorPatrimonial : fundoImobiliario.ValorPatrimonial;
                 fii.PatrimonioLiquido = fundoImobiliario.PatrimonioLiquido == null ? fii.PatrimonioLiquido : fundoImobiliario.PatrimonioLiquido;
                 fii.DataIpo = fundoImobiliario.DataIpo == null ? fii.DataIpo : fundoImobiliario.DataIpo;
-                fii.CotasEmitidas = fundoImobiliario.CotasEmitidas == null ? fii.CotasEmitidas : fundoImobiliario.CotasEmitidas;
+                fii.CotasEmitidas = fundoImobiliario.CotasEmitidas < 0 ? fii.CotasEmitidas : fundoImobiliario.CotasEmitidas;
                 fii.Cnpj = fundoImobiliario.Cnpj == null ? fii.Cnpj : fundoImobiliario.Cnpj;
                 fii.PublicoAlvo = fundoImobiliario.PublicoAlvo == null ? fii.PublicoAlvo : fundoImobiliario.PublicoAlvo;
                 fii.TaxaAdministracao = fundoImobiliario.TaxaAdministracao == null ? fii.TaxaAdministracao : fundoImobiliario.TaxaAdministracao;
