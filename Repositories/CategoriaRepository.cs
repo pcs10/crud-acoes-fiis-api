@@ -88,7 +88,7 @@ namespace CrudSimplesApiFiis.Repositories
             {
                 return "Erro ao excluir -> " + ex;
             }
-        }
+        } //excluir
 
         public async Task<string> Inserir(Categoria categoria)
         {

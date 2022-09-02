@@ -8,14 +8,18 @@ namespace CrudSimplesApiFiis.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
+           //relacionamento de muitos para muitos
             modelBuilder.Entity<FundoImobiliario>()
                 .HasMany(c => c.Categorias)
                .WithMany(fii => fii.FundosImobiliarios)
                .UsingEntity(cf => cf.ToTable("CategoriaFundoImobiliario"));
         }
 
+        //Referenciando models a tabelas do banco
         public DbSet<FundoImobiliario> FundosImobiliarios { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
